@@ -13,7 +13,7 @@ def check_domain(domain: str):
 
 
 @app.command()
-def search(desc: str, page_size=10):
+def search(desc: str, page_size=0):
     ai = AI()
     domains = ai.next(desc)
     # TODO: Add `in loop` search asking for feedback
