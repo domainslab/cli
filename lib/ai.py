@@ -10,7 +10,7 @@ GPT_4_MSG = f"Model gpt-4 is not available for provided API key. Reverting " \
 
 
 # TODO: Add CLI option to provide TLDs
-VALID_TLDS = ['.com', '.ai', '.io']
+VALID_TLDS = [input('enter tlds')]
 
 
 class AI:
@@ -24,7 +24,7 @@ class AI:
     def print(self, *args):
         return self.printer.print(*args)
 
-    def next(self, desc: str, page_size=10) -> List[str]:
+    def next(self, desc: str, page_size=input('enter size number')) -> List[str]:
         prompt = ''
         with open("prompts/default", "r") as file:
             prompt = file.read()
