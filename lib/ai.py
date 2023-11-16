@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 import openai
 from dotenv import dotenv_values
 
@@ -23,27 +23,31 @@ class AI:
 
     def print(self, *args):
         return self.printer.print(*args)
+    
 
-    def next(self, desc: str, page_size=10) -> List[str]:
+    
+
+    def next(self, desc: str, page_size: Optional[str] = 10,tlds: Optional[str]= '.com' '.ai' '.io') -> List[str]:
         prompt = ''
         with open("prompts/default", "r") as file:
             prompt = file.read()
             prompt = prompt.replace("{page_size}", str(page_size))
             prompt = prompt.replace("{desc}", desc)
-            prompt = prompt.replace("{tlds}", ', '.join(VALID_TLDS))
+            prompt = prompt.replace("{tlds}", (tlds))
 
         self.printer.print(f" Using prompt => {prompt}")
         response = openai.ChatCompletion.create(
             messages=[{"role": "user", "content": prompt}],
             model=self.model,
             temperature=self.temperature,
-        )
+        )   
 
         # TODO: Make sure content is a plain list of domain names
         # There could be a case it would return some explanation along the way
         content = response.choices[0].message.content
         return list(map(lambda item: item.split('. ')[-1], content.split('\n')))
-
+    
+   
     def __get_model(self) -> str:
         try:
             openai.Model.retrieve('gpt-4')
